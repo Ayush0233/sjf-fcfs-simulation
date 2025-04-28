@@ -5,30 +5,25 @@
         <p>Visulation simulation for understanding the alogrithm's working. </p>
     </div>
     <div class="explain">
-        <div>
-            <h1>What is Shortest Job First...?</h1>
-            <p>Shortest Job First (SJF) is a CPU scheduling algorithm where the process with the smallest execution time
-                <b>(burst time)</b> is selected to run next.
+        <div class="descDiv">
+            <h1>What is FCFS...?</h1>
+            <p>First-Come First-Served (FCFS) is a CPU scheduling algorithm where the process that <b>arrives first</b> is selected to run first.
             </p>
-            <p>It helps minimize the average waiting time for all processes and improves system efficiency.
-                SJF can be either <b>preemptive</b> or <b>non-preemptive</b>.</p>
+            <p>It is the simplest scheduling method, where processes are executed in the order they arrive without preemption. <b>FCFS</b> is easy to implement but can lead to longer average waiting times, especially when early processes have long burst times..</p>
         </div>
-        <div class="Img">
-            <!-- <img [src]="imageUrl" alt="flowchart"> -->
+        <div class="Img fcfs">
         </div>
     </div>
     <div class="explain">
-        <div class="Img">
-            <!-- <img [src]="imageUrl" alt="flowchart"> -->
-        </div>
-        <div>
+        <div class="Img"></div>
+         <div class="descDiv">
             <h1>What is Shortest Job First...?</h1>
-            <p>Shortest Job First (SJF) is a CPU scheduling algorithm where the process with the smallest execution time
-                <b>(burst time)</b> is selected to run next.
+            <p>Shortest Job First (SJF) is a CPU scheduling algorithm where the process with the smallest execution time <b>(burst time)</b> is selected to run next.
             </p>
             <p>It helps minimize the average waiting time for all processes and improves system efficiency.
                 SJF can be either <b>preemptive</b> or <b>non-preemptive</b>.</p>
         </div>
+        
     </div>
     <div>
         <button (click)="goToSimulation()" >Run Simulation ➡️</button>
