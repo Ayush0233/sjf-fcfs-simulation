@@ -1,0 +1,66 @@
+<div class="container">
+    <div class="main">
+        <h1>Scheduling Algorithms</h1>
+        <h2>( FCFS & SJF ) </h2>
+        <p>Visulation simulation for understanding the alogrithm's working. </p>
+    </div>
+    <div class="explain">
+        <div>
+            <h1>What is Shortest Job First...?</h1>
+            <p>Shortest Job First (SJF) is a CPU scheduling algorithm where the process with the smallest execution time
+                <b>(burst time)</b> is selected to run next.
+            </p>
+            <p>It helps minimize the average waiting time for all processes and improves system efficiency.
+                SJF can be either <b>preemptive</b> or <b>non-preemptive</b>.</p>
+        </div>
+        <div class="Img">
+            <!-- <img [src]="imageUrl" alt="flowchart"> -->
+        </div>
+    </div>
+    <div class="explain">
+        <div class="Img">
+            <!-- <img [src]="imageUrl" alt="flowchart"> -->
+        </div>
+        <div>
+            <h1>What is Shortest Job First...?</h1>
+            <p>Shortest Job First (SJF) is a CPU scheduling algorithm where the process with the smallest execution time
+                <b>(burst time)</b> is selected to run next.
+            </p>
+            <p>It helps minimize the average waiting time for all processes and improves system efficiency.
+                SJF can be either <b>preemptive</b> or <b>non-preemptive</b>.</p>
+        </div>
+    </div>
+    <div>
+        <button (click)="goToSimulation()" >Run Simulation ➡️</button>
+        <!-- <button (click)="goToFCFS()" >Run FCFS ➡️</button>
+        <button (click)="goToprepmtive()" >Run Premptive ➡️</button> -->
+
+
+    </div>
+    <div class="types">
+        <div class="premptive process">
+            <h1>Premptive Scheduling</h1>
+            <div class="points">
+                <ul>
+                    <li>CPU can be taken away any time.</li>
+                    <li>More efficient</li>
+                    <li>Faster</li>
+                    <li>More complex</li>
+                </ul>
+            </div>
+        </div>
+        <div class="non-premptive process">
+            <h1>Non-Premptive Scheduling</h1>
+            <div class="points">
+                <ul>
+                    <li>Process runs till end</li>
+                    <li>Less efficient</li>
+                    <li>Slower</li>
+                    <li>Simple</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- <h1>SJF simulation</h1>
+<a routerLink="/simulation">go to simulation</a> -->
+</div>
