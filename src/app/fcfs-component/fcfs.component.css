@@ -1,0 +1,195 @@
+@font-face {
+  font-family: all;
+  src: url(../images/HouschkaRoundedAlt-Medium.woff);
+}
+
+* {
+  font-family: all;
+}
+
+.container {
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  padding:1% 5%;
+  /* justify-content: space-between; */
+  min-height: 80vh;
+}
+
+.container h1 {
+  text-align: center;
+}
+
+input {
+  /* width: 10vw; */
+  padding: 1%;
+  font-size: 1.2vw;
+  margin: 1% 5%;
+}
+
+#processInputs {
+  min-height: 70vh;
+  display: flex;
+  margin-top: 2%;
+  flex-direction: column;
+  background: #f1f1f1;
+  border-radius: 10px;
+  padding: 2% 4% ;
+  border: 1px solid #959595;
+}
+#processInputs h2{
+  font-size: 2.5vw;
+  padding: 1%;
+  margin-bottom: 2%;
+  text-align: center;
+  color: white;
+  background:linear-gradient(to left, #8603dc, #b103dc, #dc03b1)
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.input-row label {
+  font-size: 1.5vw;
+  font-weight: bold;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  align-items: center;
+}
+
+button {
+  /* background: linear-gradient(to right, #dc030e, #dc0361); */
+  background: linear-gradient(to right, #dc030e, #dc0361);
+  padding: 1% 2%;
+  width: 10vw;
+  font-size: 1.2vw;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  /* box-shadow: 0 5px 10px #dc03b1; */
+}
+
+.buttons button {
+  background: linear-gradient(to right, #009900, #009900);
+  /* box-shadow: 0 2px 10px #03dc19;   */
+  width: 12vw;
+  ;
+}
+#results{
+  margin-top:5% ;
+  display: flex;
+  padding: 2%;
+  flex-direction: column;
+  background: #f1f1f1;
+  border-radius: 5px;
+  border: 1px solid #959595;
+}
+#results h2{
+  font-size: 2.5vw;
+  padding: 1%;
+  text-align: center;
+  color: white;
+  /* width: 80%; */
+  background:linear-gradient(to right, #8603dc, #b103dc, #dc03b1);
+}
+#results p{
+  font-size: 1.5vw;
+  width: 100%;
+  padding: 1%;
+  border: 2px solid #03dc19;
+  background: linear-gradient(to left, #03dc196d, #009e674b);
+  color: hsl(0, 0%, 0%);
+  display: flex;
+  justify-content: space-around;
+
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 1.5vw;
+}
+
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #007BFF;
+  color: white;
+}
+#timelineContainer{
+  margin: 5% 0;
+  padding: 2%;
+  border-radius: 5px;
+  background: #f1f1f1;
+  border: 1px solid #959595;
+}
+#timelineContainer h2{
+  font-size: 2.5vw;
+  padding: 1%;
+  text-align: center;
+  color: white;
+  background:linear-gradient(to left, #8603dc, #b103dc, #dc03b1);
+}
+#timeline {
+  margin-top: 30px;
+  padding: 10px;
+  border: 2px solid #baf9ff;
+  min-height: 50px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+.time-marker {
+  position: absolute;
+  top: -20px;
+  color: #d8d8d8;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.process-block {
+  height: 50px;
+  line-height: 50px;
+  color: #3f3b3b;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 2px;
+  
+}
+
+.process-1 {
+  background-color: #e73c50;
+}
+
+.process-2 {
+  background-color: #348adb;
+}
+
+.process-3 {
+  background-color: #0dc65b;
+}
+
+.process-4 {
+  background-color: #f1e60f;
+}
+
+.process-5 {
+  background-color: #e74ae4;
+}

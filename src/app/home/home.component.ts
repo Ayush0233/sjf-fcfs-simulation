@@ -13,4 +13,11 @@ export class HomeComponent {
   goToSimulation(){
     this.router.navigate(['/simulation'])
   }
+
+  goToFCFS(){
+    this.router.navigate(['/fcfs'])
+  }
+  goToprepmtive(){
+    this.router.navigate(['/sjf-premptive'])
+  }
 }

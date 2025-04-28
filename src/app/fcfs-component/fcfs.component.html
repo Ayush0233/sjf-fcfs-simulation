@@ -1,24 +1,9 @@
+<!-- <p>simulation works!</p> -->
 <div class="container">
-  <div class="controls">
-    <button class="backbutton" (click)="goBack()">⬅ Go Back</button>
-    <form action="" #userForm="ngForm">
-      <select name="simulation" id="dropDown" [(ngModel)]="selectedSimulation">
-        <option value="sjfnonpremp">SJF Non-Preemptive Scheduling</option>
-        <option value="sjfpremp">SJF Preemptive Scheduling</option>
-        <option value="fcfs">First Come First Serve</option>
-      </select>
-    </form>
-  </div>
-  <fcfs *ngIf="selectedSimulation==='fcfs'"></fcfs>
-  <sjf-preemptive *ngIf="selectedSimulation==='sjfpremp'"></sjf-preemptive>
-  <sjf-nonpremptive *ngIf="selectedSimulation==='sjfnonpremp'"></sjf-nonpremptive>
-</div>
-<!-- <p>simulation works!</p>
-<div class="container">
-  <button class="backbutton" (click)="goBack()" >⬅️ Go Back</button>
-  <h1>SJF Non-Preemptive Scheduling Simulation</h1>
+  <!-- <button class="backbutton" (click)="goBack()" >⬅️ Go Back</button> -->
+  <!-- <h1></h1> -->
   <div id="processInputs">
-    <h2 >Add Processes</h2>
+    <h2 >FCFS Scheduling Simulation</h2>
     <div class="buttons">
       <button id="addProcess" (click)="addProcess()">Add Process</button>
       <button id="simulate" (click)="simulate()">Run Simulation</button>
@@ -70,4 +55,4 @@
       <div class="time-marker" [style.left.px]="totalTime * unitWidth">{{totalTime}}</div>
     </div>
   </div>
-</div> -->
+</div>
