@@ -34,7 +34,7 @@ export class SimulationComponent {
     goBack(){
       this.router.navigate([''])
     }
-      selectedSimulation:string='sjfnonpremp'
+      selectedSimulation:string='sjfpremp'
     
 
   // processes: Process[] = [];

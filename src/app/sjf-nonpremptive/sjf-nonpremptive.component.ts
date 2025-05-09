@@ -1,55 +1,67 @@
-// import { Component } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {  Router } from '@angular/router';
+import { Subscription, interval } from 'rxjs';
 
 interface Process {
   id: number;
-  burst: number|null;
-  arrival: number|null;
+  burst: number | null;
+  arrival: number | null;
+  remaining?: number;
   completion?: number;
   turnAround?: number;
   waiting?: number;
-  completed?: boolean;
-  executed?: boolean;
+  executed?: boolean;       // add executed flag for scheduling
 }
 
-interface Block {
+interface ScheduleBlock {
   process: number | 'Idle';
   start: number;
   burst: number;
+  displayWidth?: number;
 }
+
 @Component({
   selector: 'sjf-nonpremptive',
-  imports: [NgFor,NgIf,FormsModule,CommonModule],
+  standalone: true,
+  imports: [NgFor, NgIf, FormsModule, CommonModule],
   templateUrl: './sjf-nonpremptive.component.html',
-  styleUrl: './sjf-nonpremptive.component.css'
+  styleUrls: ['./sjf-nonpremptive.component.css']
 })
-export class SJFNonPremptiveComponent implements OnInit {
+export class SJFNonPremptiveComponent implements OnDestroy {
   processes: Process[] = [];
-  processCounter = 1;
   resultProcesses: Process[] = [];
-  schedule: Block[] = [];
-  unitWidth = 30;
+  schedule: ScheduleBlock[] = [];
+  displaySchedule: ScheduleBlock[] = [];
+
   avgWT = 0;
   avgTAT = 0;
   totalTime = 0;
+  unitWidth = 50;
 
-  ngOnInit() {
+  animationSpeedBase = 500;
+  animationSpeedMultiplier = 1;
+  playing = false;
+
+  private nextId = 1;
+  private pointer = 0;
+  private timerSub: Subscription | null = null;
+
+  constructor() {
     this.addProcess();
     this.addProcess();
   }
-  constructor(private router:Router){}
-  goBack(){
-    this.router.navigate([''])
+
+  ngOnDestroy() {
+    this.clearTimer();
   }
+
+  goBack() {
+    window.history.back();
+  }
+
   addProcess() {
-    this.processes.push({
-      id: this.processCounter++,
-      burst: null,
-      arrival: null
-    });
+    this.processes.push({ id: this.nextId++, burst: null, arrival: null });
   }
 
   removeProcess(id: number) {
@@ -57,73 +69,105 @@ export class SJFNonPremptiveComponent implements OnInit {
   }
 
   simulate() {
-    // Initialize processes
-    const procs = this.processes.map(p => ({
-      ...p,
-      completion: 0,
-      turnAround: 0,
-      waiting: 0,
-      completed: false
-    }));
+    this.clearTimer();
+    this.resetDisplay();
+    const n = this.processes.length;
+    const procs = this.processes.map(p => ({ ...p, remaining: p.burst, executed: false }));
+    let currentTime = 0, completed = 0;
 
-    let currentTime = 0;
-    let completedCount = 0;
+    this.schedule = [];
+    this.resultProcesses = [];
 
-    while (completedCount < procs.length) {
-      const available = procs.filter(p => !p.completed && p.arrival! <= currentTime);
+    while (completed < n) {
+      // find next shortest among those not executed
+      const available = procs.filter(p => !p.executed && p.arrival! <= currentTime && p.remaining! > 0);
       if (available.length === 0) {
+        this.schedule.push({ process: 'Idle', start: currentTime, burst: 1 });
         currentTime++;
-        continue;
+      } else {
+        // non-preemptive: pick shortest burst among available
+        available.sort((a, b) => a.burst! - b.burst!);
+        const proc = available[0]!;
+        this.schedule.push({ process: proc.id, start: currentTime, burst: proc.burst! });
+        currentTime += proc.burst!;
+        proc.completion = currentTime;
+        proc.turnAround = proc.completion - proc.arrival!;
+        proc.waiting = proc.turnAround - proc.burst!;
+        proc.executed = true;
+        completed++;
+        // store final
+        const { remaining, executed, ...finalP } = proc;
+        this.resultProcesses.push(finalP);
       }
-      available.sort((a, b) => a.burst! - b.burst!);
-      const next = available[0]!;
-      currentTime += next.burst!;
-      next.completion = currentTime;
-      next.turnAround = next.completion! - next.arrival!;
-      next.waiting = next.turnAround - next.burst!;
-      next.completed = true;
-      completedCount++;
     }
 
-    this.resultProcesses = procs;
-    const totalWT = procs.reduce((sum, p) => sum + (p.waiting || 0), 0);
-    const totalTAT = procs.reduce((sum, p) => sum + (p.turnAround || 0), 0);
-    this.avgWT = parseFloat((totalWT / procs.length).toFixed(2));
-    this.avgTAT = parseFloat((totalTAT / procs.length).toFixed(2));
-
-    this.buildSchedule();
+    this.totalTime = currentTime;
+    this.calculateAverages();
+    this.resetDisplay();
+    this.playing = false;
   }
 
-  buildSchedule() {
-    let time = 0;
-    const schedule: Block[] = [];
-    const procs = this.resultProcesses.map(p => ({ ...p, executed: false }));
-    let completed = 0;
+  private calculateAverages() {
+    const n = this.resultProcesses.length;
+    const totalWT = this.resultProcesses.reduce((sum, p) => sum + (p.waiting || 0), 0);
+    const totalTAT = this.resultProcesses.reduce((sum, p) => sum + (p.turnAround || 0), 0);
 
-    while (completed < procs.length) {
-      const available = procs.filter(p => !p.executed && p.arrival! <= time);
-      if (available.length === 0) {
-        schedule.push({ process: 'Idle', start: time, burst: 1 });
-        time++;
-        continue;
-      }
-      available.sort((a, b) => a.burst! - b.burst!);
-      const proc = available[0];
-      schedule.push({ process: proc.id, start: time, burst: proc.burst! });
-      time += proc.burst!;
-      proc.executed = true;
-      completed++;
-    }
-
-    this.schedule = schedule;
-    this.totalTime = time;
+    this.avgWT = parseFloat((totalWT / n).toFixed(2));
+    this.avgTAT = parseFloat((totalTAT / n).toFixed(2));
   }
 
-  getProcessClass(proc: number | 'Idle'): string {
-    if (proc === 'Idle') {
-      return '';
+  play() {
+    if (this.playing) return;
+    this.startTimer();
+    this.playing = true;
+  }
+
+  pause() {
+    if (!this.playing) return;
+    this.clearTimer();
+    this.playing = false;
+  }
+
+  togglePlay() {
+    this.playing ? this.pause() : this.play();
+  }
+
+  runSimulation() {
+    this.clearTimer();
+    this.simulate();
+  }
+
+  private startTimer() {
+    const delay = this.animationSpeedBase / this.animationSpeedMultiplier;
+    this.timerSub = interval(delay).subscribe(() => {
+      if (this.pointer < this.displaySchedule.length) {
+        const blk = this.displaySchedule[this.pointer];
+        setTimeout(() => blk.displayWidth = blk.burst * this.unitWidth);
+        this.pointer++;
+      } else {
+        this.clearTimer();
+        this.playing = false;
+      }
+    });
+  }
+
+  private clearTimer() {
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+      this.timerSub = null;
     }
-    return 'process-' + ((proc % 5) || 5);
+  }
+
+  private resetDisplay() {
+    this.displaySchedule = this.schedule.map(b => ({ ...b, displayWidth: 0 }));
+    this.pointer = 0;
+  }
+
+  getProcessClass(id: number | 'Idle'): string {
+    return id === 'Idle' ? '' : 'process-' + ((id - 1) % 5 + 1);
+  }
+
+  trackByIdx(i: number) {
+    return i;
   }
 }
-

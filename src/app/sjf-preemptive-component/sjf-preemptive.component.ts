@@ -107,7 +107,8 @@ export class SjfPreemptiveComponent implements OnDestroy {
 
     this.totalTime = currentTime;
     this.calculateAverages();
-
+    this.resetDisplay(); // Reset display for Gantt chart
+    this.playing = false; // Ensure animation is not playing
     // DO NOT start animation automatically.
     this.resetDisplay(); 
     this.playing = false;

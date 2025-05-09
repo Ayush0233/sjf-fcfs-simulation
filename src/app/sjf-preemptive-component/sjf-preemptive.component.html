@@ -18,8 +18,8 @@
 
     <div class="input-row" *ngFor="let p of processes" [id]="'process-row-'+p.id">
       <label>Process {{p.id}} :</label>
-      <input type="number" min="0" placeholder="Burst Time" [(ngModel)]="p.burst" required>
       <input type="number" min="0" placeholder="Arrival Time" [(ngModel)]="p.arrival" required>
+      <input type="number" min="0" placeholder="Burst Time" [(ngModel)]="p.burst" required>
       <button (click)="removeProcess(p.id)" class="remove">Remove</button>
     </div>
 
@@ -66,13 +66,21 @@
 
     <div id="timeline">
       <ng-container *ngFor="let block of displaySchedule; trackBy: trackByIdx">
-        <div class="process-block" [ngClass]="getProcessClass(block.process)" [style.width.px]="block.displayWidth"
-          [style.transition]="'width ' + (animationSpeedBase/animationSpeedMultiplier) + 'ms ease'">
+        <div class="process-block"
+             [ngClass]="getProcessClass(block.process)"
+             [style.width.px]="block.displayWidth"
+             [style.transition]="'width ' + (animationSpeedBase / animationSpeedMultiplier) + 'ms ease'">
           {{ block.process === 'Idle' ? 'Idle' : 'P' + block.process }}
-          <div class="time-marker" [style.left.px]="block.start * unitWidth">{{block.start}}</div>
+          <div class="time-marker" [style.left.px]="block.start * unitWidth">
+            {{ block.start }}
+          </div>
         </div>
       </ng-container>
-      <div class="time-marker" [style.left.px]="totalTime * unitWidth">{{totalTime}}</div>
+    
+      <!-- Final time marker after all blocks -->
+      <div class="time-marker" [style.left.px]="totalTime * unitWidth">
+        {{ totalTime }}
+      </div>
     </div>
   </div>
 </div>

@@ -172,7 +172,20 @@
     margin-right: 2px;
     
   }
-  
+  .playback-controls {
+    margin: 2% 0;
+    display: flex;
+    justify-content: flex-start;
+    gap: 5%;
+  }
+  #playPause{
+    background: #004c33;
+    box-shadow: none;
+    width: 5vw;
+  }
+  input[type="range"] {
+    accent-color: #004c33; /* Or any color you like */
+  }
   .process-1 {
     background-color: #e73c50;
   }

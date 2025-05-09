@@ -160,9 +160,12 @@ th {
   gap: 5%;
 }
 #playPause{
-  background: #348adb;
+  background: #004c33;
   box-shadow: none;
   width: 5vw;
+}
+input[type="range"] {
+  accent-color: #004c33; /* Or any color you like */
 }
 #timeline {
   margin-top: 30px;

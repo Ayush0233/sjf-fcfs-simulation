@@ -1,58 +1,71 @@
-<!-- <p>simulation works!</p> -->
 <div class="container">
-    <!-- <button class="backbutton" (click)="goBack()" >⬅️ Go Back</button> -->
-    <!-- <h1> Simulation</h1> -->
-    <div id="processInputs">
-      <h2 >SJF Non-Preemptive Scheduling</h2>
-      <div class="buttons">
-        <button id="addProcess" (click)="addProcess()">Add Process</button>
-        <button id="simulate" (click)="simulate()">Run Simulation</button>
-      </div>
-      <div class="input-row" *ngFor="let p of processes" [id]="'process-row-'+p.id">
-        <label>Process {{p.id}} :</label>
-        <input type="number" min="0" placeholder="Burst Time" [(ngModel)]="p.burst" required>
-        <input type="number" min="0" placeholder="Arrival Time" [(ngModel)]="p.arrival" required>
-        <button (click)="removeProcess(p.id)" class="remove">Remove</button>
-      </div>
-      
+  <div id="processInputs">
+    <h2>SJF Non-Preemptive Scheduling</h2>
+    <div class="buttons">
+      <button id="addProcess" (click)="addProcess()">Add Process</button>
+      <button id="runSim" (click)="runSimulation()">Run Simulation</button>
     </div>
-  
-    <div id="results" *ngIf="resultProcesses.length">
-      <h2>Process Table</h2>
-      <div id="tableContainer">
-        <table>
-          <tr>
-            <th>Process ID</th>
-            <th>Burst Time</th>
-            <th>Arrival Time</th>
-            <th>Completion Time</th>
-            <th>Turnaround Time</th>
-            <th>Waiting Time</th>
-          </tr>
-          <tr *ngFor="let proc of resultProcesses">
-            <td>Process {{proc.id}}</td>
-            <td>{{proc.burst}}</td>
-            <td>{{proc.arrival}}</td>
-            <td>{{proc.completion}}</td>
-            <td>{{proc.turnAround}}</td>
-            <td>{{proc.waiting}}</td>
-          </tr>
-        </table>
-        <p><strong>Average Waiting Time: {{avgWT}} </strong> <strong>Average Turnaround Time: {{avgTAT}}</strong> </p>
+
+    <div class="input-row" *ngFor="let p of processes" [id]="'process-row-'+p.id">
+      <label>Process {{p.id}} :</label>
+      <input type="number" min="0" placeholder="Arrival Time" [(ngModel)]="p.arrival" required>
+      <input type="number" min="0" placeholder="Burst Time" [(ngModel)]="p.burst" required>
+      <button (click)="removeProcess(p.id)" class="remove">Remove</button>
+    </div>
+  </div>
+
+  <div id="results" *ngIf="resultProcesses.length">
+    <h2>Process Table</h2>
+    <div id="tableContainer">
+      <table>
+        <tr>
+          <th>Process ID</th>
+          <th>Burst Time</th>
+          <th>Arrival Time</th>
+          <th>Completion Time</th>
+          <th>Turnaround Time</th>
+          <th>Waiting Time</th>
+        </tr>
+        <tr *ngFor="let proc of resultProcesses">
+          <td>Process {{proc.id}}</td>
+          <td>{{proc.burst}}</td>
+          <td>{{proc.arrival}}</td>
+          <td>{{proc.completion}}</td>
+          <td>{{proc.turnAround}}</td>
+          <td>{{proc.waiting}}</td>
+        </tr>
+      </table>
+      <p><strong>Average Waiting Time: {{avgWT}}</strong> <strong>Average Turnaround Time: {{avgTAT}}</strong></p>
+    </div>
+  </div>
+
+  <div id="timelineContainer" *ngIf="displaySchedule.length">
+    <h2>Gantt Chart Timeline</h2>
+    <div class="playback-controls">
+      <button id="playPause" (click)="togglePlay()">{{ playing ? '⏸' : '▶' }}</button>
+      <div class="animation-controls">
+        <label>Speed:</label>
+        <input type="range" min="0.5" max="2" step="0.1" [(ngModel)]="animationSpeedMultiplier">
+        <span>{{animationSpeedMultiplier}}x</span>
       </div>
     </div>
-  
-    <div id="timelineContainer" *ngIf="schedule.length">
-      <h2>Gantt Chart Timeline</h2>
-      <div id="timeline">
-        <ng-container *ngFor="let block of schedule">
-          <div class="process-block" [ngClass]="getProcessClass(block.process)"
-            [style.width.px]="block.burst * unitWidth">
-            {{ block.process === 'Idle' ? 'Idle' : 'P' + block.process }}
-            <div class= "time-marker" [style.left.px]="block.start * unitWidth">{{block.start}}</div>
+
+    <div id="timeline">
+      <ng-container *ngFor="let block of displaySchedule; trackBy: trackByIdx">
+        <div class="process-block"
+             [ngClass]="getProcessClass(block.process)"
+             [style.width.px]="block.displayWidth"
+             [style.transition]="'width ' + (animationSpeedBase / animationSpeedMultiplier) + 'ms ease'">
+          {{ block.process === 'Idle' ? 'Idle' : 'P' + block.process }}
+          <div class="time-marker" [style.left.px]="block.start * unitWidth">
+            {{ block.start }}
           </div>
-        </ng-container>
-        <div class="time-marker" [style.left.px]="totalTime * unitWidth">{{totalTime}}</div>
+        </div>
+      </ng-container>
+
+      <div class="time-marker" [style.left.px]="totalTime * unitWidth">
+        {{ totalTime }}
       </div>
     </div>
   </div>
+</div>
